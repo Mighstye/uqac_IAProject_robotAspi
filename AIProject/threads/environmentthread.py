@@ -19,7 +19,7 @@ class environmentthread(threading.Thread):
         logging.info("Environment Thread    : Stopped.")
 
     def stop(self):
-        logging.info("Stop signal sent to Environment Thread")
+        logging.info("Environment Thread    : Stop signal sent to Environment Thread")
         self.stopsignal = True
 
     def getenv(self):
