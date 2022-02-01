@@ -1,12 +1,13 @@
 from AIProject.enum import roomobjects
-import numpy as np
+import random
 
 
 class Room:
     inventory = []
 
     def __init__(self):
-        randomizer = np.randint(0, 100)
+        self.inventory = []
+        randomizer = random.randint(0, 100)
         if 50 <= randomizer < 75:
             self.inventory.append(roomobjects.roomobjects.DUST)
         if 75 <= randomizer < 90:
