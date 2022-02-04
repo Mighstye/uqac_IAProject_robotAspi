@@ -32,3 +32,10 @@ class Room:
         # The robot can ask the captor of the room with this method,
         # and it'll return what the room contains
         return [self.hasDust, self.hasJewelry]
+
+    def changerobotstate(self):
+        #  Method to tell a room if the robot is here
+        if self.robothere:
+            self.robothere = False
+        else:
+            self.robothere = True
