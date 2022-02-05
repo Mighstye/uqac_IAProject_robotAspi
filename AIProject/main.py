@@ -4,6 +4,7 @@ import AIProject.enum.roomobjects as roomobj
 import logging
 import threading
 import AIProject.environment.room as room
+from tkinter import *
 
 import AIProject.threads.environmentthread as envithreads
 
@@ -39,7 +40,7 @@ if __name__ == "__main__":
     logging.info("Main      : Visual Grid Initialized")
 
 
-    def updatevisualgrid():
+    def updatevisualgrid(fenetre):
         # This method should be used to update the whole visual grid
         # Use this if major change happened to the env grid
         newgrid = environment.getenv().grid
@@ -49,6 +50,17 @@ if __name__ == "__main__":
                          in
                          range(5)]
         logging.info("Main      : Visual Grid Updated !")
+        print(visualgrid[1][1])
+        for ligne in range(5):
+            for colonne in range(5):
+                if newvisualgrid[ligne][colonne][0][1] == 1 and newvisualgrid[ligne][colonne][1][1] == 0:
+                    Label(fenetre, text="☁", borderwidth=1).grid(row=ligne, column=colonne)
+                if newvisualgrid[ligne][colonne][0][1] == 1 and newvisualgrid[ligne][colonne][1][1] == 1:
+                    Label(fenetre, text="☁💎", borderwidth=1).grid(row=ligne, column=colonne)
+                if newvisualgrid[ligne][colonne][0][1] == 0 and newvisualgrid[ligne][colonne][1][1] == 1:
+                    Label(fenetre, text="💎", borderwidth=1).grid(row=ligne, column=colonne)
+                if newvisualgrid[ligne][colonne][0][1] == 0 and newvisualgrid[ligne][colonne][1][1] == 0:
+                    Label(fenetre, text=" ", borderwidth=1).grid(row=ligne, column=colonne)
         return newvisualgrid
 
 
@@ -62,6 +74,10 @@ if __name__ == "__main__":
                                ["💎", newgrid[i][j].inventory.count(roomobj.roomobjects.JEWELRY)]]
         logging.info("Main      : Individual update performed !")
 
+
+    fenetre = Tk()
+    visualgrid = updatevisualgrid(fenetre)
+
     # Little time sleep to have a clear console display (Might get removed)
     time.sleep(0.1)
 
@@ -69,16 +85,14 @@ if __name__ == "__main__":
     # Displaying the visualgrid in the console atm
     # But we should on a way to display it in a UI
     # --> Tkinter
-    """"Boucle de refresh
-            while True:
-            visualgrid = updatevisualgrid()
-            for list in visualgrid:
-                for elem in list:
-                    print(elem, end=" | ")
-                print("")
-            time.sleep(5)
-    """
-    # random update
+
+    visualgrid = updatevisualgrid(fenetre)
+    for list in visualgrid:
+        for elem in list:
+            print(elem, end=" | ")
+        print("")
+
+    fenetre.mainloop()
 
     """Program end"""
     # End of the program
