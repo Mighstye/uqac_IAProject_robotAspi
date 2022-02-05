@@ -1,6 +1,10 @@
 import logging
 import AIProject.environment.env as env
 import threading
+import random
+import AIProject.enum.roomobjects as roomobjects
+import AIProject.environment.env as env
+import time
 
 
 # The thread for the environment gestion
@@ -18,7 +22,10 @@ class environmentthread(threading.Thread):
         # Run loop of the thread
         logging.info("Environment Thread    : Started !")  # Some logging
         while not self.stopsignal:  # Execution loop that stop when stopsignal boolean become True
-            """Things happening here !"""
+            self.generateElement(100, roomobjects.roomobjects.JEWELRY) # Generate dust with probability 55%
+            self.generateElement(0, roomobjects.roomobjects.DUST) # Generate Jewel with probability 40%
+            time.sleep(1)
+
         logging.info("Environment Thread    : Stopped.")
 
     def stop(self):
@@ -32,3 +39,18 @@ class environmentthread(threading.Thread):
         # Method to return to whole environment associated with the thread
         # This method will be mainly used to display the environment in a UI
         return self.env
+
+    def generateElement(self, p , roomobjects):
+        if p >= random.uniform(0, 1) * 100:  # if random with probability p
+            jewelPlaced = False
+            while not jewelPlaced:
+                x = random.randint(0, 4)
+                y = random.randint(0, 4)
+                while not env.env.grid[x][y].setElement(roomobjects):
+                    x = random.randint(0, 4)
+                    y = random.randint(0, 4)
+                    """magic"""
+                logging.info("Element added to the grid at the position " + str(x) + " " + str(y))
+                jewelPlaced = True
+
+                # while not env.env.grid[x][y].setElement(roomobjects):

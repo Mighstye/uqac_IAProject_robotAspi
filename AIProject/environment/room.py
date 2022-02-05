@@ -32,3 +32,15 @@ class Room:
         # The robot can ask the captor of the room with this method,
         # and it'll return what the room contains
         return [self.hasDust, self.hasJewelry]
+
+    def setElement(self, roomobjects):
+        # This method will set an element in a room
+        for element in self.inventory:
+            print(element)
+            print(roomobjects)
+            if element == roomobjects:
+                print("Element refuse")
+                return False  # Room already contains DUST
+            print("element ajoute")
+            self.inventory.append(roomobjects)
+            return True
