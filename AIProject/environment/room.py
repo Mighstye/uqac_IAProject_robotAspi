@@ -6,10 +6,12 @@ import random
 class Room:
     hasDust = False
     hasJewelry = False
+    robothere = False
 
     def __init__(self):
         self.hasDust = False
         self.hasJewelry = False
+        self.robothere = False
         randomizer = random.randint(0, 100)
         if 50 <= randomizer < 75:
             self.hasDust = True
