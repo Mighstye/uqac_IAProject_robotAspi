@@ -1,9 +1,7 @@
 import time
 
-import AIProject.enum.roomobjects as roomobj
 import logging
 import threading
-import AIProject.environment.room as room
 
 import AIProject.threads.environmentthread as envithreads
 
@@ -33,9 +31,8 @@ if __name__ == "__main__":
     grid = environment.getenv().grid  # We get the grid of the environment
     # We create a visualgrid of the previous grid
     # The visualgrid consist of different string (Two per rooms)
-    visualgrid = [[[["☁", grid[i][j].inventory.count(roomobj.roomobjects.DUST)],
-                    ["💎", grid[i][j].inventory.count(roomobj.roomobjects.JEWELRY)]] for j in range(5)] for i in
-                  range(5)]
+    visualgrid = [[["☁" if grid[j][i].hasDust == True else " ",
+                    "💎" if grid[j][i].hasJewelry == True else " "] for j in range(5)] for i in range(5)]
     logging.info("Main      : Visual Grid Initialized")
 
 
@@ -44,10 +41,8 @@ if __name__ == "__main__":
         # Use this if major change happened to the env grid
         newgrid = environment.getenv().grid
         logging.info("Main      : Updating Visual Grid...")
-        newvisualgrid = [[[["☁", newgrid[i][j].inventory.count(roomobj.roomobjects.DUST)],
-                           ["💎", newgrid[i][j].inventory.count(roomobj.roomobjects.JEWELRY)]] for j in range(5)] for i
-                         in
-                         range(5)]
+        newvisualgrid = [[["☁" if newgrid[j][i].hasDust == True else " ",
+                           "💎" if newgrid[j][i].hasJewelry == True else " "] for j in range(5)] for i in range(5)]
         logging.info("Main      : Visual Grid Updated !")
         return newvisualgrid
 
@@ -58,9 +53,10 @@ if __name__ == "__main__":
         # Use this if only few rooms have changed, and if you know perfectly which rooms changed
         newgrid = environment.getenv().grid
         logging.info("Main      : Performing individuals update for [", i, ",", j, "]")
-        newvisualgrid[i][j] = [["☁", newgrid[i][j].inventory.count(roomobj.roomobjects.DUST)],
-                               ["💎", newgrid[i][j].inventory.count(roomobj.roomobjects.JEWELRY)]]
+        newvisualgrid[i][j] = [["☁" if grid[j][i].hasDust == True else " ",
+                                "💎" if grid[j][i].hasJewelry == True else " "]]
         logging.info("Main      : Individual update performed !")
+
 
     # Little time sleep to have a clear console display (Might get removed)
     time.sleep(0.1)
@@ -69,16 +65,15 @@ if __name__ == "__main__":
     # Displaying the visualgrid in the console atm
     # But we should on a way to display it in a UI
     # --> Tkinter
-    """"Boucle de refresh
-            while True:
-            visualgrid = updatevisualgrid()
-            for list in visualgrid:
-                for elem in list:
-                    print(elem, end=" | ")
-                print("")
-            time.sleep(5)
+
+    """while True:
+        visualgrid = updatevisualgrid()
+        for list in visualgrid:
+            for elem in list:
+                print(elem, end=" | ")
+            print("")
+        time.sleep(5)
     """
-    # random update
 
     """Program end"""
     # End of the program
