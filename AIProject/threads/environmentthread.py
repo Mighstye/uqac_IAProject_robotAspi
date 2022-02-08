@@ -2,7 +2,6 @@ import logging
 import AIProject.environment.env as env
 import threading
 import random
-import AIProject.enum.roomobjects as roomobjects
 import AIProject.environment.env as env
 import time
 
@@ -22,8 +21,8 @@ class environmentthread(threading.Thread):
         # Run loop of the thread
         logging.info("Environment Thread    : Started !")  # Some logging
         while not self.stopsignal:  # Execution loop that stop when stopsignal boolean become True
-            self.generateElement(100, roomobjects.roomobjects.JEWELRY) # Generate dust with probability 55%
-            self.generateElement(0, roomobjects.roomobjects.DUST) # Generate Jewel with probability 40%
+            self.generateElement(100, "DUST") # Generate dust with probability 55%
+            self.generateElement(100, "JEWELRY") # Generate Jewel with probability 40%
             time.sleep(1)
 
         logging.info("Environment Thread    : Stopped.")
@@ -33,24 +32,30 @@ class environmentthread(threading.Thread):
         # This method set the stopsignal boolean to True
         # Making the thread to stop by itself
         logging.info("Environment Thread    : Stop signal sent to Environment Thread")
-        self.stopsignal = True
+        # self.stopsignal = True
 
     def getenv(self):
         # Method to return to whole environment associated with the thread
         # This method will be mainly used to display the environment in a UI
         return self.env
 
-    def generateElement(self, p , roomobjects):
+    def generateElement(self, p , roomobject):
         if p >= random.uniform(0, 1) * 100:  # if random with probability p
-            jewelPlaced = False
-            while not jewelPlaced:
+            elementPlaced = False
+            cantPlaceElement=False
+            i = 0
+            while not elementPlaced or cantPlaceElement:
                 x = random.randint(0, 4)
                 y = random.randint(0, 4)
-                while not env.env.grid[x][y].setElement(roomobjects):
+                while not env.env.grid[x][y].setElement(roomobject) :
                     x = random.randint(0, 4)
                     y = random.randint(0, 4)
+                    i += 1
+                    if i >= 100 :
+                        logging.info("Could not place element after " + str(i) + " try, aborting")
+                        return False
                     """magic"""
                 logging.info("Element added to the grid at the position " + str(x) + " " + str(y))
-                jewelPlaced = True
+                elementPlaced = True
 
                 # while not env.env.grid[x][y].setElement(roomobjects):

@@ -66,14 +66,14 @@ if __name__ == "__main__":
     # But we should on a way to display it in a UI
     # --> Tkinter
 
-    """while True:
+    while True:
         visualgrid = updatevisualgrid()
         for list in visualgrid:
             for elem in list:
                 print(elem, end=" | ")
             print("")
         time.sleep(5)
-    """
+
 
     """Program end"""
     # End of the program
