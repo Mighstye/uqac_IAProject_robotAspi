@@ -4,6 +4,8 @@ import logging
 import threading
 
 import AIProject.threads.environmentthread as envithreads
+import AIProject.robot.robot as Robot
+import AIProject.environment.env as env
 
 if __name__ == "__main__":
     """Initialization"""
@@ -32,7 +34,8 @@ if __name__ == "__main__":
     # We create a visualgrid of the previous grid
     # The visualgrid consist of different string (Two per rooms)
     visualgrid = [[["☁" if grid[j][i].hasDust == True else " ",
-                    "💎" if grid[j][i].hasJewelry == True else " "] for j in range(5)] for i in range(5)]
+                    "💎" if grid[j][i].hasJewelry == True else " ",
+                    "🤖" if grid[j][i].robothere == True else " "] for j in range(5)] for i in range(5)]
     logging.info("Main      : Visual Grid Initialized")
 
 
@@ -42,7 +45,8 @@ if __name__ == "__main__":
         newgrid = environment.getenv().grid
         logging.info("Main      : Updating Visual Grid...")
         newvisualgrid = [[["☁" if newgrid[j][i].hasDust == True else " ",
-                           "💎" if newgrid[j][i].hasJewelry == True else " "] for j in range(5)] for i in range(5)]
+                           "💎" if newgrid[j][i].hasJewelry == True else " ",
+                           "🤖" if newgrid[j][i].robothere == True else " "] for j in range(5)] for i in range(5)]
         logging.info("Main      : Visual Grid Updated !")
         return newvisualgrid
 
@@ -54,26 +58,31 @@ if __name__ == "__main__":
         newgrid = environment.getenv().grid
         logging.info("Main      : Performing individuals update for [", i, ",", j, "]")
         newvisualgrid[i][j] = [["☁" if grid[j][i].hasDust == True else " ",
-                                "💎" if grid[j][i].hasJewelry == True else " "]]
+                                "💎" if grid[j][i].hasJewelry == True else " ",
+                                "🤖" if grid[j][i].robothere == True else " "]]
         logging.info("Main      : Individual update performed !")
+
 
 
     # Little time sleep to have a clear console display (Might get removed)
     time.sleep(0.1)
+    robot = environment.getenv().putrobot()
 
     """Interface"""
     # Displaying the visualgrid in the console atm
     # But we should on a way to display it in a UI
     # --> Tkinter
 
-    """while True:
+    while True:
         visualgrid = updatevisualgrid()
         for list in visualgrid:
             for elem in list:
                 print(elem, end=" | ")
             print("")
-        time.sleep(5)
-    """
+        environment.getenv().robot.randomMove()
+        time.sleep(2)
+
+
 
     """Program end"""
     # End of the program

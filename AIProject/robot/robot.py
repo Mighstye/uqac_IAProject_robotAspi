@@ -1,7 +1,8 @@
 import logging
 
 from AIProject.enum.cardinals import Cardinals
-
+import random
+import AIProject.environment.env as env
 
 # TODO DEBUG
 class Robot:
@@ -14,20 +15,26 @@ class Robot:
         self.bonus = 0
         self.position = coord
         self.environment = environment  # We tell the robot which env it's attached to
-        self.environment.grid[self.position[0], self.position[1]].changerobotstate()
+        self.environment.grid[self.position[0]][self.position[1]].changerobotstate()
         # We tell the robot where the robot spawned that the robot is actually here
 
-    def move(self, card):  # Make the robot move (TODO Check if the direction are right)
-        self.environment.grid[self.position[0], self.position[1]].changerobotstate()  # Robot leave the room
+    def move(self, card):  # Make the robot move
+        self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot leave the room
+        # logging.info(len(self.environment.grid[0][0]))
+        #TODO Prevent the robot from going outside the grid, return FALSE when deplacement is not permitted
         if card == Cardinals.NORTH:
-            self.position = [self.position[0] + 1, self.position[1]]
-        if card == Cardinals.SOUTH:
-            self.position = [self.position[0] - 1, self.position[1]]
-        if card == Cardinals.EAST:
-            self.position = [self.position[0], self.position[1] + 1]
-        if card == Cardinals.WEST:
             self.position = [self.position[0], self.position[1] - 1]
-        self.environment.grid[self.position[0], self.position[1]].changerobotstate()  # Robot join the room
+            logging.info("Going north")
+        if card == Cardinals.SOUTH:
+            self.position = [self.position[0], self.position[1] + 1]
+            logging.info("Going south")
+        if card == Cardinals.EAST:
+            self.position = [self.position[0] + 1, self.position[1]]
+            logging.info("Going east")
+        if card == Cardinals.WEST:
+            self.position = [self.position[0] - 1, self.position[1]]
+            logging.info("Going west")
+        self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot join the room
 
     def vacuum(self):
         #  The robot vacuum everything in the room and put it in its dust bag (jewels included)
@@ -47,3 +54,14 @@ class Robot:
             self.environment.grid[self.position[1], self.position[1]].clean()
         else:
             logging.warning("Robot     : Can't take jewels when there is dust, too late !")
+
+    def randomMove(self):
+        a = random.randint(0,3)
+        if a == 0:
+            self.move(Cardinals.NORTH)
+        if a == 1:
+            self.move(Cardinals.SOUTH)
+        if a == 2:
+            self.move(Cardinals.EAST)
+        if a == 3:
+            self.move(Cardinals.WEST)
