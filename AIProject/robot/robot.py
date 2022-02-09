@@ -14,7 +14,7 @@ class Robot:
         self.bonus = 0
         self.position = coord
         self.environment = environment  # We tell the robot which env it's attached to
-        self.environment.grid[self.position[0], self.position[1]].changerobotstate()
+        self.environment.grid[self.position[0]][self.position[1]].changerobotstate()
         # We tell the robot where the robot spawned that the robot is actually here
 
     def move(self, card):  # Make the robot move (TODO Check if the direction are right)
