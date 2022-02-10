@@ -39,28 +39,50 @@ if __name__ == "__main__":
                   range(5)]
     logging.info("Main      : Visual Grid Initialized")
 
+    fenetre = Tk()
+    fenetre.geometry("900x900")
 
-    def updatevisualgrid(fenetre):
+    frame_grille = Frame(fenetre, width=420, height=420)
+    frame_grille.place(x=250, y=250)
+    frame_grille.configure(bg='yellow')
+
+    listLabel = []
+    for ligne in range(5):
+        list_ligne_label = []
+        for colonne in range(5):
+            if visualgrid[ligne][colonne][0][1] == 1 and visualgrid[ligne][colonne][1][1] == 0:
+                label = Label(master=frame_grille, text="☁", borderwidth=1, relief="raised", width=10, height=5)
+                label.grid(row=ligne, column=colonne)
+                list_ligne_label.append(label)
+            if visualgrid[ligne][colonne][0][1] == 1 and visualgrid[ligne][colonne][1][1] == 1:
+                label = Label(frame_grille, text="☁💎", borderwidth=1, relief="raised", width=10, height=5)
+                label.grid(row=ligne, column=colonne)
+                list_ligne_label.append(label)
+            if visualgrid[ligne][colonne][0][1] == 0 and visualgrid[ligne][colonne][1][1] == 1:
+                label = Label(frame_grille, text="💎", borderwidth=1, relief="raised", width=10, height=5)
+                label.grid(row=ligne, column=colonne)
+                list_ligne_label.append(label)
+            if visualgrid[ligne][colonne][0][1] == 0 and visualgrid[ligne][colonne][1][1] == 0:
+                label = Label(master=frame_grille, text=" ", borderwidth=1, relief="raised", width=10, height=5)
+                label.grid(row=ligne, column=colonne)
+                list_ligne_label.append(label)
+        listLabel.append(list_ligne_label)
+
+
+
+
+    def updatevisualgrid():
         # This method should be used to update the whole visual grid
         # Use this if major change happened to the env grid
+
         newgrid = environment.getenv().grid
         logging.info("Main      : Updating Visual Grid...")
         newvisualgrid = [[[["☁", newgrid[i][j].inventory.count(roomobj.roomobjects.DUST)],
-                           ["💎", newgrid[i][j].inventory.count(roomobj.roomobjects.JEWELRY)]] for j in range(5)] for i
-                         in
-                         range(5)]
+                           ["💎", newgrid[i][j].inventory.count(roomobj.roomobjects.JEWELRY)]] for j in range(5)] for i in range(5)]
         logging.info("Main      : Visual Grid Updated !")
-        print(visualgrid[1][1])
-        for ligne in range(5):
-            for colonne in range(5):
-                if newvisualgrid[ligne][colonne][0][1] == 1 and newvisualgrid[ligne][colonne][1][1] == 0:
-                    Label(fenetre, text="☁", borderwidth=1).grid(row=ligne, column=colonne)
-                if newvisualgrid[ligne][colonne][0][1] == 1 and newvisualgrid[ligne][colonne][1][1] == 1:
-                    Label(fenetre, text="☁💎", borderwidth=1).grid(row=ligne, column=colonne)
-                if newvisualgrid[ligne][colonne][0][1] == 0 and newvisualgrid[ligne][colonne][1][1] == 1:
-                    Label(fenetre, text="💎", borderwidth=1).grid(row=ligne, column=colonne)
-                if newvisualgrid[ligne][colonne][0][1] == 0 and newvisualgrid[ligne][colonne][1][1] == 0:
-                    Label(fenetre, text=" ", borderwidth=1).grid(row=ligne, column=colonne)
+
+        listLabel[0][0].configure(text="oui")
+
         return newvisualgrid
 
 
@@ -75,8 +97,18 @@ if __name__ == "__main__":
         logging.info("Main      : Individual update performed !")
 
 
-    fenetre = Tk()
-    visualgrid = updatevisualgrid(fenetre)
+
+
+    # fenetre = Tk()
+    # fenetre.geometry("900x900")
+    #
+    # frame_grille = Frame(fenetre, width=420, height=420)
+    # frame_grille.place(x=250, y=250)
+    # frame_grille.configure(bg='yellow')
+
+
+
+    visualgrid = updatevisualgrid()
 
     # Little time sleep to have a clear console display (Might get removed)
     time.sleep(0.1)
@@ -86,12 +118,14 @@ if __name__ == "__main__":
     # But we should on a way to display it in a UI
     # --> Tkinter
 
-    visualgrid = updatevisualgrid(fenetre)
+    visualgrid = updatevisualgrid()
     for list in visualgrid:
         for elem in list:
             print(elem, end=" | ")
         print("")
 
+
+    #frame_grille.pack()
     fenetre.mainloop()
 
     """Program end"""
