@@ -4,6 +4,7 @@ from AIProject.enum.cardinals import Cardinals
 import random
 import AIProject.environment.env as env
 
+
 # TODO DEBUG
 class Robot:
     malus = 0
@@ -21,7 +22,7 @@ class Robot:
     def move(self, card):  # Make the robot move
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot leave the room
         # logging.info(len(self.environment.grid[0][0]))
-        #TODO Prevent the robot from going outside the grid, return FALSE when deplacement is not permitted
+        # TODO Prevent the robot from going outside the grid, return FALSE when deplacement is not permitted
         if card == Cardinals.NORTH:
             self.position = [self.position[0], self.position[1] - 1]
             logging.info("Going north")
@@ -56,7 +57,7 @@ class Robot:
             logging.warning("Robot     : Can't take jewels when there is dust, too late !")
 
     def randomMove(self):
-        a = random.randint(0,3)
+        a = random.randint(0, 3)
         if a == 0:
             self.move(Cardinals.NORTH)
         if a == 1:

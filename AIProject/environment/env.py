@@ -11,3 +11,4 @@ class env:
         env.robot = robot.Robot(self, [2, 2])
         #  TODO The robot have to show up in the visual grid
         #  To do so, use the robothere boolean of rooms
+        return env.robot
