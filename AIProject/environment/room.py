@@ -41,3 +41,18 @@ class Room:
             self.robothere = False
         else:
             self.robothere = True
+    def setElement(self, roomobject):
+        # This method will set an element in a room
+        if roomobject == "DUST":
+            if self.hasDust:
+                return False
+            else:
+                self.hasDust = True
+                return True
+
+        else:
+            if self.hasJewelry:
+                return False
+            else:
+                self.hasJewelry = True
+                return True
