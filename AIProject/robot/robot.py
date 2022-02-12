@@ -66,3 +66,59 @@ class Robot:
             self.move(Cardinals.EAST)
         if a == 3:
             self.move(Cardinals.WEST)
+
+    def searchValue(noVisitedRoom):
+
+        for i in range(5):
+            for j in range(5):
+                if noVisitedRoom[i][j] ==True:
+
+                    break
+                    print('true')
+
+        print('false')
+
+    def deepSearch(self, environment):
+
+        self.environment = environment  # We tell the robot which env it's attached to
+
+        noVisitedRoom = [[0 for i in range(5)] for j in range(5)]    # We build a boolean matrix to know visited rooms
+        Mesures = [[0 for i in range(5)] for j in range(5)]         # We build a numeric matrix to have our metric performance in each room
+        waitingList =[]
+        waitingList.append(self.position)
+
+        pos = waitingList[0]
+
+
+
+        if self.environment.grid[pos[0]][pos[1]].hasJewelry and self.environment.grid[pos[0]][pos[1]].hasDust:
+            Mesures[pos[0]][pos[1]] -= 1
+        elif self.environment.grid[pos[0]][pos[1]].hasDust:
+            Mesures[pos[0]][pos[1]] += 1
+        elif self.environment.grid[pos[0]][pos[1]].hasJewelry:
+            Mesures[pos[0]][pos[1]] += 2
+
+        if noVisitedRoom[pos[0] - 1][pos[1]] == 0 and pos[0]-1 >= 0:
+
+            if [pos[0] - 1, pos[1]] not in waitingList:
+                waitingList.insert(0, [pos[0] - 1, pos[1]])
+
+        if noVisitedRoom[pos[0]][pos[1] - 1] == 0 and pos[1]-1 >= 0:
+            if [pos[0], pos[1] - 1] not in waitingList:
+                waitingList.insert(0, [pos[0], pos[1] - 1])
+
+        if noVisitedRoom[pos[0] + 1][pos[1]] == 0 and pos[0]+1 >= 0 >= 0:
+            if [pos[0] + 1, pos[1]] not in waitingList:
+                waitingList.insert(0, [pos[0] + 1, pos[1]])
+
+        if noVisitedRoom[pos[0]][pos[1] + 1] == 0 and pos[1]+1 >= 0:
+            if [pos[0], pos[1] + 1] not in waitingList:
+                waitingList.insert(0, [pos[0], pos[1] + 1])
+
+        noVisitedRoom[pos[0]][pos[1]] = 1
+        waitingList.pop()
+
+
+
+        print(Mesures)
+

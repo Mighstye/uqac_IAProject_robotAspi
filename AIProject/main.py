@@ -58,7 +58,7 @@ if __name__ == "__main__":
         return newlist
 
     robot = environment.getenv().putrobot()
-
+    robot.deepSearch(environment.getenv())
     """Interface"""
     # --> Tkinter
 
