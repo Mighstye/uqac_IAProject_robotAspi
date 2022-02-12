@@ -22,13 +22,11 @@ if __name__ == "__main__":
     # Creation of the environment thread
     environment = envithreads.environmentthread(threading.Lock())
     logging.info("Main      : Starting environment thread")
-    # Starting the environment thread (It actually runs the run() method of the thread)
-    environment.start()
+    # Starting the environment thread (It actually runs the run() method of the thread
 
     robot = environment.getenv().putrobot()
-    robot.deepSearch()
-
     robotT = robotthread.robotthread(threading.Lock(), robot)
+    environment.start()
     robotT.start()
 
     """Data Treatment"""
