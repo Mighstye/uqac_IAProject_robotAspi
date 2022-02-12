@@ -1,5 +1,4 @@
 import logging
-import AIProject.environment.env as env
 import threading
 import random
 import AIProject.environment.env as env
@@ -21,9 +20,9 @@ class environmentthread(threading.Thread):
         # Run loop of the thread
         logging.info("Environment Thread    : Started !")  # Some logging
         while not self.stopsignal:  # Execution loop that stop when stopsignal boolean become True
-            self.generateElement(100, "DUST") # Generate dust with probability 55%
-            self.generateElement(100, "JEWELRY") # Generate Jewel with probability 40%
-            time.sleep(1)
+            self.generateElement(10, "DUST") # Generate dust with probability 55%
+            self.generateElement(5, "JEWELRY") # Generate Jewel with probability 40%
+            time.sleep(3)
 
         logging.info("Environment Thread    : Stopped.")
 
@@ -32,7 +31,7 @@ class environmentthread(threading.Thread):
         # This method set the stopsignal boolean to True
         # Making the thread to stop by itself
         logging.info("Environment Thread    : Stop signal sent to Environment Thread")
-        # self.stopsignal = True
+        self.stopsignal = True
 
     def getenv(self):
         # Method to return to whole environment associated with the thread

@@ -1,10 +1,9 @@
-import time
-
 import logging
 import threading
 from tkinter import *
 
 import AIProject.threads.environmentthread as envithreads
+import AIProject.threads.robotthread as robotthread
 
 if __name__ == "__main__":
     """Initialization"""
@@ -23,8 +22,12 @@ if __name__ == "__main__":
     # Creation of the environment thread
     environment = envithreads.environmentthread(threading.Lock())
     logging.info("Main      : Starting environment thread")
-    # Starting the environment thread (It actually runs the run() method of the thread)
+    # Starting the environment thread (It actually runs the run() method of the thread
+
+    robot = environment.getenv().putrobot()
+    robotT = robotthread.robotthread(threading.Lock(), robot)
     environment.start()
+    robotT.start()
 
     """Data Treatment"""
     # Here, we will treat the environmental data
@@ -56,8 +59,6 @@ if __name__ == "__main__":
                 text = ""
             newlist.append(list_ligne_label)
         return newlist
-
-    robot = environment.getenv().putrobot()
 
     """Interface"""
     # --> Tkinter
