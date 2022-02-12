@@ -1,5 +1,4 @@
 import logging
-import AIProject.environment.env as env
 import threading
 import random
 import AIProject.environment.env as env
@@ -32,7 +31,7 @@ class environmentthread(threading.Thread):
         # This method set the stopsignal boolean to True
         # Making the thread to stop by itself
         logging.info("Environment Thread    : Stop signal sent to Environment Thread")
-        # self.stopsignal = True
+        self.stopsignal = True
 
     def getenv(self):
         # Method to return to whole environment associated with the thread

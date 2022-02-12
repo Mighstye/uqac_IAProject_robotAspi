@@ -78,9 +78,7 @@ class Robot:
 
         print('false')
 
-    def deepSearch(self, environment):
-
-        self.environment = environment  # We tell the robot which env it's attached to
+    def deepSearch(self):
 
         noVisitedRoom = [[0 for i in range(5)] for j in range(5)]    # We build a boolean matrix to know visited rooms
         Mesures = [[0 for i in range(5)] for j in range(5)]         # We build a numeric matrix to have our metric performance in each room
