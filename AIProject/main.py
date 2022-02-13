@@ -95,13 +95,13 @@ if __name__ == "__main__":
             for colonne in range(5):
                 w = 0
                 if grille[ligne][colonne]=="☁":
-                    w = 6 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+                    w = 6 - math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
                     H+=1
                 if grille[ligne][colonne]=="💎":
-                    w = 9 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+                    w = 9 - math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
                     H += 1
                 if grille[ligne][colonne]=="☁💎":
-                    w = 3 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+                    w = 3 - math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
                     H += 1
                 casePoids.append(w)
             listPoids.append(casePoids)
@@ -121,6 +121,8 @@ if __name__ == "__main__":
 
         for move in possibleMove:
             if move == "aller a droite":
+                coordonnees = [coordonnees[0]+1, coordonnees[1]]
+                print(coordonnees)
                 listReturn = explorationAstar(coordonnees, grille)
                 # calcul de f
                 f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
@@ -132,6 +134,7 @@ if __name__ == "__main__":
                 coupleNodeOrdre.append(ordre)
                 listOfNode.append(coupleNodeOrdre)
             if move == "aller a gauche":
+                coordonnees = [coordonnees[0] - 1, coordonnees[1]]
                 listReturn = explorationAstar(coordonnees, grille)
                 f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
                 node = Node.Node(coordonnees, f, possibleMove, grille)
@@ -140,6 +143,7 @@ if __name__ == "__main__":
                 coupleNodeOrdre.append(ordre)
                 listOfNode.append(coupleNodeOrdre)
             if move == "aller en haut":
+                coordonnees = [coordonnees[0], coordonnees[1] + 1]
                 listReturn = explorationAstar(coordonnees, grille)
                 f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
                 node = Node.Node(coordonnees, f, possibleMove, grille)
@@ -148,6 +152,7 @@ if __name__ == "__main__":
                 coupleNodeOrdre.append(ordre)
                 listOfNode.append(coupleNodeOrdre)
             if move == "aller en bas":
+                coordonnees = [coordonnees[0], coordonnees[1] - 1]
                 listReturn = explorationAstar(coordonnees, grille)
                 f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
                 node = Node.Node(coordonnees, f, possibleMove, grille)
@@ -158,11 +163,11 @@ if __name__ == "__main__":
         #Selection du prochain noeud
         f1 = listOfNode[0][0].f
         for node in listOfNode:
-            print(node[0].f)
-            if node[0].f < f1 :
-                f1 = node.f
+            if node[0].f <= f1 :
+                f1 = node[0].f
+                print(f1)
         for node in listOfNode:
-            if node[0].f > f1:
+            if node[0].f >= f1:
                 listOfUnlockyNode.append(node[0])
         for node in listOfNode:
             if node[0].f == f1:
@@ -176,10 +181,10 @@ if __name__ == "__main__":
                 luckyNode[0] = node
 
         #condition d'arret et appel récursif
-        print(listReturn[0])
         if listReturn[0] == 0 and firstAstarStep:
             return firstNodeOrdre
         else:
+            print("x = " + str(luckyNode[0].coordonnees[0]) + " y = " + str(luckyNode[0].coordonnees[1]))
             print(grille)
             astar(luckyNode[0].coordonnees, listOfUnlockyNode, firstAstarStep, luckyNode[0].grille)
 
