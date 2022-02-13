@@ -1,6 +1,7 @@
 import logging
 import threading
 from tkinter import *
+import time
 
 import AIProject.threads.environmentthread as envithreads
 import AIProject.threads.robotthread as robotthread
@@ -28,6 +29,10 @@ if __name__ == "__main__":
     robotT = robotthread.robotthread(threading.Lock(), robot)
     environment.start()
     robotT.start()
+
+    visualgrid = [[["☁" if environment.getenv().grid[i][j].hasDust == True else " ",
+                    "💎" if environment.getenv().grid[i][j].hasJewelry == True else " ",
+                    "🤖" if environment.getenv().grid[i][j].robothere == True else " "] for j in range(5)] for i in range(5)]
 
     """Data Treatment"""
     # Here, we will treat the environmental data
@@ -64,9 +69,19 @@ if __name__ == "__main__":
     # --> Tkinter
 
     while True:
+        visualgrid = [[["☁" if environment.getenv().grid[i][j].hasDust == True else " ",
+                        "💎" if environment.getenv().grid[i][j].hasJewelry == True else " ",
+                        "🤖" if environment.getenv().grid[i][j].robothere == True else " "] for j in range(5)] for i in
+                      range(5)]
+        for ligne in visualgrid:
+            for elem in ligne:
+                print(elem, end=" | ")
+            print()
+        print("--------------------------------------------")
         tkinterwindowsupdate()
         fenetre.update_idletasks()
         fenetre.update()
+        time.sleep(1)
 
     """Program end"""
     # End of the program
