@@ -3,9 +3,13 @@ import threading
 import random
 import AIProject.environment.env as env
 import time
-
+from AIProject.robot import robot
+import numpy as np
 
 # The thread for the environment gestion
+
+
+
 class environmentthread(threading.Thread):
     stopsignal = False  # This boolean is used to stop the thread when needed.
 
@@ -15,6 +19,7 @@ class environmentthread(threading.Thread):
         self.env = env.env()  # The environment associated with the thread
         threading.Thread.__init__(self)  # Put the class into a thread
         logging.info("Environment Thread    : Initialized")  # Log the thread has been initialized
+        self.robot = robot
 
     def run(self):
         # Run loop of the thread
@@ -58,3 +63,34 @@ class environmentthread(threading.Thread):
                 elementPlaced = True
 
                 # while not env.env.grid[x][y].setElement(roomobjects):
+
+    def distanceToRobot(self,x,y):
+        positionRobot = robot.Robot.position
+        distance = abs(x-positionRobot[0]) + abs(y-positionRobot[1])
+
+        return distance
+
+
+    def computeCost(self):
+        costgrid = np.zeros((5,5))
+        for i in range(5):
+            for j in range(5):
+                if env.env.grid[i][j].hasJewelry and env.env.grid[i][j].hasDust:
+                    costgrid[i][j] = 2
+                elif env.env.grid[i][j].hasJewelry:
+                    costgrid[i][j] = 10
+                elif env.env.grid[i][j].hasDust:
+                    costgrid[i][j] = 5
+                costgrid[i][j] -= self.distanceToRobot(i, j)
+        return costgrid
+
+    def highestReward(self):
+        highestRewardPosition = 0,0
+        highestReward = 0
+        costgrid = [0][0]
+        costgrid = self.computeCost()
+        for i in range(5):
+            for j in range(5):
+                if costgrid[i][j] > highestReward:
+                    highestRewardPosition = i,j
+        return highestRewardPosition

@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # Starting the environment thread (It actually runs the run() method of the thread
 
     robot = environment.getenv().putrobot()
-    robotT = robotthread.robotthread(threading.Lock(), robot)
+    robotT = robotthread.robotthread(threading.Lock(), robot, environment)
     environment.start()
     robotT.start()
 
@@ -78,9 +78,9 @@ if __name__ == "__main__":
                 print(elem, end=" | ")
             print()
         print("--------------------------------------------")
-        tkinterwindowsupdate()
-        fenetre.update_idletasks()
-        fenetre.update()
+        #tkinterwindowsupdate()
+        #fenetre.update_idletasks()
+        #fenetre.update()
         time.sleep(1)
 
     """Program end"""

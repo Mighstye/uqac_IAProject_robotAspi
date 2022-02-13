@@ -3,6 +3,7 @@ import logging
 from AIProject.enum.cardinals import Cardinals
 import random
 import AIProject.environment.env as env
+import AIProject.threads.environmentthread
 
 
 # TODO DEBUG
@@ -67,3 +68,20 @@ class Robot:
         else:
             self.randomMove()
 
+    def goToPosition(self, x, y):
+        if x != self.position[0]:
+            if self.position[0] > x:
+                self.move(Cardinals.EAST)
+            else:
+                self.move(Cardinals.WEST)
+        elif y != self.position[1]:
+            if self.position[1] > y:
+                self.move(Cardinals.NORTH)
+            else:
+                self.move(Cardinals.SOUTH)
+        else:
+            logging.info("Already at position [" + str(x) + "," + str(y) + "]")
+            return False
+
+    def goToHighestReward(self, env):
+        self.goToPosition(env.highestReward())
