@@ -1,5 +1,6 @@
 import logging
 import threading
+import time
 from tkinter import *
 
 import AIProject.threads.environmentthread as envithreads
@@ -67,6 +68,7 @@ if __name__ == "__main__":
         tkinterwindowsupdate()
         fenetre.update_idletasks()
         fenetre.update()
+        time.sleep(0.5)
 
     """Program end"""
     # End of the program

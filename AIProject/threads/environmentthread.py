@@ -20,8 +20,8 @@ class environmentthread(threading.Thread):
         # Run loop of the thread
         logging.info("Environment Thread    : Started !")  # Some logging
         while not self.stopsignal:  # Execution loop that stop when stopsignal boolean become True
-            self.generateElement(10, "DUST") # Generate dust with probability 55%
-            self.generateElement(5, "JEWELRY") # Generate Jewel with probability 40%
+            self.generateElement(20, "DUST") # Generate dust with probability 55%
+            self.generateElement(10, "JEWELRY") # Generate Jewel with probability 40%
             time.sleep(3)
 
         logging.info("Environment Thread    : Stopped.")
