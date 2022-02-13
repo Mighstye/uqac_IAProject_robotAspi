@@ -3,8 +3,10 @@ import time
 import logging
 import threading
 from tkinter import *
+import math
 
 import AIProject.threads.environmentthread as envithreads
+import AIProject.Node as Node
 
 if __name__ == "__main__":
     """Initialization"""
@@ -38,6 +40,151 @@ if __name__ == "__main__":
     frame_grille.place(x=250, y=250)
     frame_grille.configure(bg='yellow')
 
+    listOfUnlockyNode = []
+    firstAstarStep = False
+
+    def grilleConvertisseur():
+        grille = []
+        for ligne in range(5):
+            ligneGrille = []
+            for colonne in range(5):
+                if environment.getenv().grid[ligne][colonne].hasDust and not environment.getenv().grid[ligne][colonne].hasJewelry:
+                    ligneGrille.append("☁")
+                if not environment.getenv().grid[ligne][colonne].hasDust and  environment.getenv().grid[ligne][colonne].hasJewelry:
+                    ligneGrille.append("💎")
+                if environment.getenv().grid[ligne][colonne].hasDust and  environment.getenv().grid[ligne][colonne].hasJewelry:
+                    ligneGrille.append("☁💎")
+                if not environment.getenv().grid[ligne][colonne].hasDust and not environment.getenv().grid[ligne][colonne].hasJewelry:
+                    ligneGrille.append("0")
+            grille.append(ligneGrille)
+        return grille
+
+    # def explorationAstar(coordonnees):
+    #     listReturn = []
+    #     listPoids = []
+    #     H = 0
+    #     xRobot = coordonnees[0]
+    #     yRobot = coordonnees[1]
+    #     for ligne in range(5):
+    #         casePoids = []
+    #         for colonne in range(5):
+    #             w = 0
+    #             if environment.getenv().grid[ligne][colonne].hasDust and not environment.getenv().grid[ligne][colonne].hasJewelry:
+    #                 w = 6 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+    #                 H+=1
+    #             if environment.getenv().grid[ligne][colonne].hasJewelry and not environment.getenv().grid[ligne][colonne].hasDust:
+    #                 w = 9 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+    #                 H += 1
+    #             if environment.getenv().grid[ligne][colonne].hasJewelry and environment.getenv().grid[ligne][colonne].hasDust:
+    #                 w = 3 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+    #                 H += 1
+    #             casePoids.append(w)
+    #         listPoids.append(casePoids)
+    #     listReturn.append(H)
+    #     listReturn.append(listPoids)
+    #     return listReturn
+
+    def explorationAstar(coordonnees, grille):
+        listReturn = []
+        listPoids = []
+        H = 0
+        xRobot = coordonnees[0]
+        yRobot = coordonnees[1]
+        for ligne in range(5):
+            casePoids = []
+            for colonne in range(5):
+                w = 0
+                if grille[ligne][colonne]=="☁":
+                    w = 6 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+                    H+=1
+                if grille[ligne][colonne]=="💎":
+                    w = 9 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+                    H += 1
+                if grille[ligne][colonne]=="☁💎":
+                    w = 3 + math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2)
+                    H += 1
+                casePoids.append(w)
+            listPoids.append(casePoids)
+        listReturn.append(H)
+        listReturn.append(listPoids)
+        return listReturn
+
+
+    def astar(coordonnees, listOfUnlockyNode, firstAstarStep, grille):
+        listOfNode = []
+        possibleMove = robot.possibleMove(coordonnees)
+        luckyNode = 0
+        firstNode = 0
+        ordre = ""
+        coupleNodeOrdre = []
+
+
+        for move in possibleMove:
+            if move == "aller a droite":
+                listReturn = explorationAstar(coordonnees, grille)
+                # calcul de f
+                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+                # creation nouveau noeud
+                node = Node.Node(coordonnees, f, possibleMove, grille)
+                #ajout nouveau noeud a la liste
+                coupleNodeOrdre = []
+                coupleNodeOrdre.append(node)
+                coupleNodeOrdre.append(ordre)
+                listOfNode.append(coupleNodeOrdre)
+            if move == "aller a gauche":
+                listReturn = explorationAstar(coordonnees, grille)
+                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+                node = Node.Node(coordonnees, f, possibleMove, grille)
+                coupleNodeOrdre = []
+                coupleNodeOrdre.append(node)
+                coupleNodeOrdre.append(ordre)
+                listOfNode.append(coupleNodeOrdre)
+            if move == "aller en haut":
+                listReturn = explorationAstar(coordonnees, grille)
+                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+                node = Node.Node(coordonnees, f, possibleMove, grille)
+                coupleNodeOrdre = []
+                coupleNodeOrdre.append(node)
+                coupleNodeOrdre.append(ordre)
+                listOfNode.append(coupleNodeOrdre)
+            if move == "aller en bas":
+                listReturn = explorationAstar(coordonnees, grille)
+                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+                node = Node.Node(coordonnees, f, possibleMove, grille)
+                coupleNodeOrdre = []
+                coupleNodeOrdre.append(node)
+                coupleNodeOrdre.append(ordre)
+                listOfNode.append(coupleNodeOrdre)
+        #Selection du prochain noeud
+        f1 = listOfNode[0][0].f
+        for node in listOfNode:
+            print(node[0].f)
+            if node[0].f < f1 :
+                f1 = node.f
+        for node in listOfNode:
+            if node[0].f > f1:
+                listOfUnlockyNode.append(node[0])
+        for node in listOfNode:
+            if node[0].f == f1:
+                luckyNode = node
+        luckyNode[0].grille[luckyNode[0].coordonnees[0]][luckyNode[0].coordonnees[1]] = "0"
+        if firstAstarStep:
+            firstNodeOrdre = luckyNode[1]
+            firstAstarStep = True
+        for node in listOfUnlockyNode:
+            if node.f < f1:
+                luckyNode[0] = node
+
+        #condition d'arret et appel récursif
+        print(listReturn[0])
+        if listReturn[0] == 0 and firstAstarStep:
+            return firstNodeOrdre
+        else:
+            print(grille)
+            astar(luckyNode[0].coordonnees, listOfUnlockyNode, firstAstarStep, luckyNode[0].grille)
+
+
+
     def tkinterwindowsupdate():
         newlist = []
         for ligne in range(5):
@@ -64,8 +211,12 @@ if __name__ == "__main__":
 
     while True:
         tkinterwindowsupdate()
+        #explorationAstar(robot.position)
+        ordre = astar(robot.position, listOfUnlockyNode, firstAstarStep, grilleConvertisseur())
+        print(ordre)
         fenetre.update_idletasks()
         fenetre.update()
+
 
     """Program end"""
     # End of the program

@@ -21,19 +21,17 @@ class Robot:
 
     def move(self, card):  # Make the robot move
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot leave the room
-        # logging.info(len(self.environment.grid[0][0]))
-        # TODO Prevent the robot from going outside the grid, return FALSE when deplacement is not permitted
         if card == Cardinals.NORTH:
-            self.position = [self.position[0], self.position[1] - 1]
+            self.position = [self.position[0] - 1, self.position[1]]
             logging.info("Going north")
         if card == Cardinals.SOUTH:
-            self.position = [self.position[0], self.position[1] + 1]
+            self.position = [self.position[0] + 1, self.position[1]]
             logging.info("Going south")
         if card == Cardinals.EAST:
-            self.position = [self.position[0] + 1, self.position[1]]
+            self.position = [self.position[0], self.position[1] + 1]
             logging.info("Going east")
         if card == Cardinals.WEST:
-            self.position = [self.position[0] - 1, self.position[1]]
+            self.position = [self.position[0], self.position[1] - 1]
             logging.info("Going west")
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot join the room
 
@@ -66,3 +64,15 @@ class Robot:
             self.move(Cardinals.EAST)
         if a == 3:
             self.move(Cardinals.WEST)
+
+    def possibleMove(self, coordonnees):
+        move = []
+        if coordonnees[0] + 1 <=4:
+            move.append("aller a droite")
+        if coordonnees[0] - 1 >=0:
+            move.append("aller a gauche")
+        if coordonnees[1] + 1 <=4:
+            move.append("aller en haut")
+        if coordonnees[1] - 1 >=0:
+            move.append("aller en bas")
+        return move
