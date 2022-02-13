@@ -3,7 +3,7 @@ import logging
 from AIProject.enum.cardinals import Cardinals
 import random
 import AIProject.environment.env as env
-import AIProject.threads.environmentthread
+
 
 
 # TODO DEBUG
@@ -23,17 +23,17 @@ class Robot:
     def move(self, card):  # Make the robot move
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot leave the room
         if card == Cardinals.NORTH:
-            self.position = [self.position[0] - 1, self.position[1]]
             logging.info("Going north")
+            self.position = [self.position[0] - 1, self.position[1]]
         if card == Cardinals.SOUTH:
-            self.position = [self.position[0] + 1, self.position[1]]
             logging.info("Going south")
+            self.position = [self.position[0] + 1, self.position[1]]
         if card == Cardinals.EAST:
-            self.position = [self.position[0], self.position[1] + 1]
             logging.info("Going east")
+            self.position = [self.position[0], self.position[1] + 1]
         if card == Cardinals.WEST:
-            self.position = [self.position[0], self.position[1] - 1]
             logging.info("Going west")
+            self.position = [self.position[0], self.position[1] - 1]
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot join the room
 
     def vacuum(self):
@@ -68,20 +68,21 @@ class Robot:
         else:
             self.randomMove()
 
-    def goToPosition(self, x, y):
-        if x != self.position[0]:
-            if self.position[0] > x:
-                self.move(Cardinals.EAST)
-            else:
+    def goToPosition(self, tuple):
+        if tuple[0] != self.position[0]:
+            if self.position[0] > tuple[0]:
                 self.move(Cardinals.WEST)
-        elif y != self.position[1]:
-            if self.position[1] > y:
+            else:
+                self.move(Cardinals.EAST)
+        elif tuple[1] != self.position[1]:
+            if self.position[1] > tuple[1]:
                 self.move(Cardinals.NORTH)
             else:
                 self.move(Cardinals.SOUTH)
         else:
-            logging.info("Already at position [" + str(x) + "," + str(y) + "]")
+            logging.info("Already at position [" + str(tuple[0]) + "," + str(tuple[1]) + "]")
             return False
 
     def goToHighestReward(self, env):
+        print(env.highestReward())
         self.goToPosition(env.highestReward())

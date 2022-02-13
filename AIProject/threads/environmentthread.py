@@ -19,7 +19,6 @@ class environmentthread(threading.Thread):
         self.env = env.env()  # The environment associated with the thread
         threading.Thread.__init__(self)  # Put the class into a thread
         logging.info("Environment Thread    : Initialized")  # Log the thread has been initialized
-        self.robot = robot
 
     def run(self):
         # Run loop of the thread
@@ -65,7 +64,7 @@ class environmentthread(threading.Thread):
                 # while not env.env.grid[x][y].setElement(roomobjects):
 
     def distanceToRobot(self,x,y):
-        positionRobot = robot.Robot.position
+        positionRobot = self.env.getRobot().position
         distance = abs(x-positionRobot[0]) + abs(y-positionRobot[1])
 
         return distance
@@ -76,12 +75,13 @@ class environmentthread(threading.Thread):
         for i in range(5):
             for j in range(5):
                 if env.env.grid[i][j].hasJewelry and env.env.grid[i][j].hasDust:
-                    costgrid[i][j] = 2
-                elif env.env.grid[i][j].hasJewelry:
-                    costgrid[i][j] = 10
-                elif env.env.grid[i][j].hasDust:
                     costgrid[i][j] = 5
+                elif env.env.grid[i][j].hasJewelry:
+                    costgrid[i][j] = 15
+                elif env.env.grid[i][j].hasDust:
+                    costgrid[i][j] = 10
                 costgrid[i][j] -= self.distanceToRobot(i, j)
+        print(costgrid)
         return costgrid
 
     def highestReward(self):
@@ -91,6 +91,9 @@ class environmentthread(threading.Thread):
         costgrid = self.computeCost()
         for i in range(5):
             for j in range(5):
+                # print("highestReward : " + str(highestReward))
                 if costgrid[i][j] > highestReward:
-                    highestRewardPosition = i,j
+                    highestRewardPosition = j,i
+                    highestReward = costgrid[i][j]
+        print("highestReward : " + str(highestReward))
         return highestRewardPosition
