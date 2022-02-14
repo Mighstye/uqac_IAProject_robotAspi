@@ -1,5 +1,6 @@
 import logging
 import threading
+import time
 from tkinter import *
 import time
 
@@ -69,19 +70,12 @@ if __name__ == "__main__":
     # --> Tkinter
 
     while True:
-        visualgrid = [[["☁" if environment.getenv().grid[i][j].hasDust == True else " ",
-                        "💎" if environment.getenv().grid[i][j].hasJewelry == True else " ",
-                        "🤖" if environment.getenv().grid[i][j].robothere == True else " "] for j in range(5)] for i in
-                      range(5)]
-        for ligne in visualgrid:
-            for elem in ligne:
-                print(elem, end=" | ")
-            print()
-        print("--------------------------------------------")
+        for widget in frame_grille.winfo_children():
+            widget.destroy()
         tkinterwindowsupdate()
         fenetre.update_idletasks()
         fenetre.update()
-        time.sleep(1)
+        time.sleep(0.5)
 
     """Program end"""
     # End of the program
