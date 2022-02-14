@@ -71,8 +71,8 @@ class Robot:
             move.append("aller a droite")
         if coordonnees[0] - 1 >=0:
             move.append("aller a gauche")
-        if coordonnees[1] - 1 >=0:
-            move.append("aller en haut")
         if coordonnees[1] + 1 <=4:
+            move.append("aller en haut")
+        if coordonnees[1] - 1 >=0:
             move.append("aller en bas")
         return move

@@ -84,124 +84,197 @@ if __name__ == "__main__":
     #     listReturn.append(listPoids)
     #     return listReturn
 
-    def explorationAstar(coordonnees, grille):
-        listReturn = []
-        listPoids = []
-        H = 0
-        xRobot = coordonnees[0]
-        yRobot = coordonnees[1]
-        for ligne in range(5):
-            casePoids = []
-            for colonne in range(5):
-                w = 0
-                if grille[ligne][colonne]=="☁":
-                    w = math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2) - 6
-                    H+=1
-                if grille[ligne][colonne]=="💎":
-                    w = math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2) - 9
-                    H += 1
-                if grille[ligne][colonne]=="☁💎":
-                    w = math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2) - 3
-                    H += 1
-                casePoids.append(w)
-            listPoids.append(casePoids)
-        listReturn.append(H)
-        listReturn.append(listPoids)
-        return listReturn
+    # def explorationAstar(coordonnees, grille):
+    #     listReturn = []
+    #     listPoids = []
+    #     H = 0
+    #     xRobot = coordonnees[0]
+    #     yRobot = coordonnees[1]
+    #     for ligne in range(5):
+    #         casePoids = []
+    #         for colonne in range(5):
+    #             w = 0
+    #             if grille[ligne][colonne]=="☁":
+    #                 w = math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2) - 6
+    #                 H+=1
+    #             if grille[ligne][colonne]=="💎":
+    #                 w = math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2) - 9
+    #                 H += 1
+    #             if grille[ligne][colonne]=="☁💎":
+    #                 w = math.sqrt((ligne-yRobot)**2 + (colonne-xRobot)**2) - 3
+    #                 H += 1
+    #             casePoids.append(w)
+    #         listPoids.append(casePoids)
+    #     listReturn.append(H)
+    #     listReturn.append(listPoids)
+    #     return listReturn
 
 
-    def astar(coordonnees, listOfUnlockyNode, firstAstarStep, grille):
-        listOfNode = []
+    # def astar(coordonnees, listOfUnlockyNode, firstAstarStep, grille):
+    #     listOfNode = []
+    #     possibleMove = robot.possibleMove(coordonnees)
+    #     luckyNode = 0
+    #     firstNode = 0
+    #     ordre = ""
+    #     coupleNodeOrdre = []
+    #     print("coups possible : "+str(possibleMove))
+    #
+    #     for move in possibleMove:
+    #         if move == "aller a droite":
+    #             ordre = move
+    #             print(coordonnees)
+    #             coordonnees = [coordonnees[0]+1, coordonnees[1]]
+    #             print(coordonnees)
+    #             listReturn = explorationAstar(coordonnees, grille)
+    #             # calcul de f
+    #             f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+    #             # creation nouveau noeud
+    #             node = Node.Node(coordonnees, f, possibleMove, grille)
+    #             #ajout nouveau noeud a la liste
+    #             coupleNodeOrdre = []
+    #             coupleNodeOrdre.append(node)
+    #             coupleNodeOrdre.append(ordre)
+    #             listOfNode.append(coupleNodeOrdre)
+    #         if move == "aller a gauche":
+    #             ordre = move
+    #             coordonnees = [coordonnees[0]-1, coordonnees[1]]
+    #             listReturn = explorationAstar(coordonnees, grille)
+    #             f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+    #             node = Node.Node(coordonnees, f, possibleMove, grille)
+    #             coupleNodeOrdre = []
+    #             coupleNodeOrdre.append(node)
+    #             coupleNodeOrdre.append(ordre)
+    #             listOfNode.append(coupleNodeOrdre)
+    #         if move == "aller en haut":
+    #             ordre = move
+    #             coordonnees = [coordonnees[0], coordonnees[1]+1]
+    #             listReturn = explorationAstar(coordonnees, grille)
+    #             f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+    #             node = Node.Node(coordonnees, f, possibleMove, grille)
+    #             coupleNodeOrdre = []
+    #             coupleNodeOrdre.append(node)
+    #             coupleNodeOrdre.append(ordre)
+    #             listOfNode.append(coupleNodeOrdre)
+    #         if move == "aller en bas":
+    #             ordre = move
+    #             coordonnees = [coordonnees[0], coordonnees[1]-1]
+    #             listReturn = explorationAstar(coordonnees, grille)
+    #             f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
+    #             node = Node.Node(coordonnees, f, possibleMove, grille)
+    #             coupleNodeOrdre = []
+    #             coupleNodeOrdre.append(node)
+    #             coupleNodeOrdre.append(ordre)
+    #             listOfNode.append(coupleNodeOrdre)
+    #     #Selection du prochain noeud
+    #     f1 = listOfNode[0][0].f
+    #     orderPrime = ""
+    #     for couple in listOfNode:
+    #         print(f1)
+    #         if couple[0].f <= f1:
+    #             f1 = couple[0].f
+    #             orderPrime = couple[1]
+    #     for couple in listOfNode:
+    #         if couple[0].f >= f1:
+    #             listOfUnlockyNode.append(couple)
+    #     for couple in listOfNode:
+    #         if couple[1] == orderPrime:
+    #             luckyNode = couple
+    #             print(luckyNode)
+    #     luckyNode[0].grille[luckyNode[0].coordonnees[0]][luckyNode[0].coordonnees[1]] = "0"
+    #     print(str(luckyNode[0].coordonnees[0]) + " " + str(luckyNode[0].coordonnees[1]))
+    #
+    #     if firstAstarStep:
+    #         firstNodeOrdre = luckyNode[1]
+    #         firstAstarStep = True
+    #     # for couple in listOfUnlockyNode:
+    #     #     if couple[0].f < f1:
+    #     #         print("ouiiii")
+    #     #         luckyNode = couple
+    #
+    #     #condition d'arret et appel récursif
+    #     if listReturn[0] == 0 and firstAstarStep:
+    #         return firstNodeOrdre
+    #     else:
+    #         print("order : "+luckyNode[1])
+    #         print("H = "+str(listReturn[0]))
+    #         print("x = " + str(luckyNode[0].coordonnees[0]) + " y = " + str(luckyNode[0].coordonnees[1]))
+    #         print(grille)
+    #         astar(luckyNode[0].coordonnees, listOfUnlockyNode, firstAstarStep, luckyNode[0].grille)
+
+    def astar(coordonnees, grille, listOfLuckyNode):
         possibleMove = robot.possibleMove(coordonnees)
-        luckyNode = 0
-        firstNode = 0
-        ordre = ""
-        coupleNodeOrdre = []
-        print("coups possible : "+str(possibleMove))
-
-        for move in possibleMove:
-            if move == "aller a droite":
-                ordre = move
-                print(coordonnees)
-                coordonnees = [coordonnees[0]+1, coordonnees[1]]
-                print(coordonnees)
-                listReturn = explorationAstar(coordonnees, grille)
-                # calcul de f
-                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
-                # creation nouveau noeud
-                node = Node.Node(coordonnees, f, possibleMove, grille)
-                #ajout nouveau noeud a la liste
-                coupleNodeOrdre = []
-                coupleNodeOrdre.append(node)
-                coupleNodeOrdre.append(ordre)
-                listOfNode.append(coupleNodeOrdre)
-            if move == "aller a gauche":
-                ordre = move
-                coordonnees = [coordonnees[0]-1, coordonnees[1]]
-                listReturn = explorationAstar(coordonnees, grille)
-                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
-                node = Node.Node(coordonnees, f, possibleMove, grille)
-                coupleNodeOrdre = []
-                coupleNodeOrdre.append(node)
-                coupleNodeOrdre.append(ordre)
-                listOfNode.append(coupleNodeOrdre)
-            if move == "aller en haut":
-                ordre = move
-                coordonnees = [coordonnees[0], coordonnees[1]+1]
-                listReturn = explorationAstar(coordonnees, grille)
-                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
-                node = Node.Node(coordonnees, f, possibleMove, grille)
-                coupleNodeOrdre = []
-                coupleNodeOrdre.append(node)
-                coupleNodeOrdre.append(ordre)
-                listOfNode.append(coupleNodeOrdre)
-            if move == "aller en bas":
-                ordre = move
-                coordonnees = [coordonnees[0], coordonnees[1]-1]
-                listReturn = explorationAstar(coordonnees, grille)
-                f = listReturn[0] + listReturn[1][coordonnees[0]][coordonnees[1]] + 1
-                node = Node.Node(coordonnees, f, possibleMove, grille)
-                coupleNodeOrdre = []
-                coupleNodeOrdre.append(node)
-                coupleNodeOrdre.append(ordre)
-                listOfNode.append(coupleNodeOrdre)
-        #Selection du prochain noeud
-        f1 = listOfNode[0][0].f
-        orderPrime = ""
-        for couple in listOfNode:
-            print(f1)
-            if couple[0].f <= f1:
-                f1 = couple[0].f
-                orderPrime = couple[1]
-        for couple in listOfNode:
-            if couple[0].f >= f1:
-                listOfUnlockyNode.append(couple)
-        for couple in listOfNode:
-            if couple[1] == orderPrime:
-                luckyNode = couple
-                print(luckyNode)
-        luckyNode[0].grille[luckyNode[0].coordonnees[0]][luckyNode[0].coordonnees[1]] = "0"
-        print(str(luckyNode[0].coordonnees[0]) + " " + str(luckyNode[0].coordonnees[1]))
-
-        if firstAstarStep:
-            firstNodeOrdre = luckyNode[1]
-            firstAstarStep = True
-        # for couple in listOfUnlockyNode:
-        #     if couple[0].f < f1:
-        #         print("ouiiii")
-        #         luckyNode = couple
-
-        #condition d'arret et appel récursif
-        if listReturn[0] == 0 and firstAstarStep:
-            return firstNodeOrdre
+        listeEnfantNode = creationListeEnfantNode(coordonnees, possibleMove, grille, listOfLuckyNode)
+        print("liste noeud enfant : "+str(possibleMove))
+        luckyNode = nodeSelection(listeEnfantNode)
+        newGrille = grilleUpdate(grille, luckyNode.coordonnees)
+        listOfLuckyNode.append(luckyNode)
+        H = determinationH(newGrille, coordonnees)
+        if H == 0:
+            return listOfLuckyNode[0].move
         else:
-            print("order : "+luckyNode[1])
-            print("H = "+str(listReturn[0]))
-            print("x = " + str(luckyNode[0].coordonnees[0]) + " y = " + str(luckyNode[0].coordonnees[1]))
-            print(grille)
-            astar(luckyNode[0].coordonnees, listOfUnlockyNode, firstAstarStep, luckyNode[0].grille)
+            astar(coordonnees, newGrille, listOfLuckyNode)
 
 
+    def determinationH(grille, coordonnees):
+        H = 0
+        for i in range(5):
+            for j in range(5):
+                if grille[i][j] == "☁":
+                    H+=1
+                if grille[i][j] == "💎":
+                    H += 1
+                if grille[i][j] == "☁💎":
+                    H += 1
+        if grille[coordonnees[0]][coordonnees[1]] == "☁" or grille[coordonnees[0]][coordonnees[1]] == "💎" or grille[coordonnees[0]][coordonnees[1]] == "☁💎":
+            H-=1
+        return H
+
+    def determinationF(H, listOfLuckyNode):
+        F = H + len(listOfLuckyNode)
+        return F
+
+    def grilleUpdate(grille, coordonnees):
+        if grille[coordonnees[0]][coordonnees[1]] == "☁" or grille[coordonnees[0]][coordonnees[1]] == "💎" or grille[coordonnees[0]][coordonnees[1]] == "☁💎":
+            grille[coordonnees[0]][coordonnees[1]] = "0"
+        return grille
+
+    def creationListeEnfantNode(coordonnees, possibleMove, grille, listOfLuckyNode):
+        listeEnfantNode = []
+        for move in possibleMove :
+            if move == "aller a droite":
+                newCoord = [coordonnees[0]+1, coordonnees[1]]
+                H = determinationH(grille, newCoord)
+                F = determinationF(H, listOfLuckyNode)
+                node = Node.Node(newCoord, F, possibleMove, grille)
+                listeEnfantNode.append(node)
+            if move == "aller a gauche":
+                newCoord = [coordonnees[0] - 1, coordonnees[1]]
+                H = determinationH(grille, newCoord)
+                F = determinationF(H, listOfLuckyNode)
+                node = Node.Node(newCoord, F, possibleMove, grille)
+                listeEnfantNode.append(node)
+            if move == "aller en haut":
+                newCoord = [coordonnees[0], coordonnees[1]+1]
+                H = determinationH(grille, newCoord)
+                F = determinationF(H, listOfLuckyNode)
+                node = Node.Node(newCoord, F, possibleMove, grille)
+                listeEnfantNode.append(node)
+            if move == "aller en bas":
+                newCoord = [coordonnees[0], coordonnees[1]-1]
+                H = determinationH(grille, newCoord)
+                F = determinationF(H, listOfLuckyNode)
+                node = Node.Node(newCoord, F, possibleMove, grille)
+                listeEnfantNode.append(node)
+        return listeEnfantNode
+
+    def nodeSelection(listEnfantNode):
+        F = 100
+        luckyNode = 0
+        for node in listEnfantNode:
+            if node.f <= F:
+                F = node.f
+                luckyNode = node
+        return luckyNode
 
     def tkinterwindowsupdate():
         newlist = []
@@ -227,13 +300,16 @@ if __name__ == "__main__":
     """Interface"""
     # --> Tkinter
 
+    listOfLuckyNode = []
+
     while True:
         tkinterwindowsupdate()
+        order = astar(robot.position, grilleConvertisseur(), listOfLuckyNode)
         #explorationAstar(robot.position)
-        ordre = astar(robot.position, listOfUnlockyNode, firstAstarStep, grilleConvertisseur())
-        print(ordre)
+        #ordre = astar(robot.position, listOfUnlockyNode, firstAstarStep, grilleConvertisseur())
         fenetre.update_idletasks()
         fenetre.update()
+        time.sleep(1)
 
 
     """Program end"""
