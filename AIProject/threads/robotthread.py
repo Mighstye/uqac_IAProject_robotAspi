@@ -2,14 +2,13 @@ import math
 import time
 import logging
 import threading
-import AIProject.threads.environmentthread as envthread
 import AIProject.enum.cardinals as card
+
 
 class robotthread(threading.Thread):
     stopsignal = False
 
-    def __init__(self, mutex, robot, mode):
-    def __init__(self, mutex, robot, envthread):
+    def __init__(self, mutex, robot, mode, envthread):
         time.sleep(0.5)
         self.poidsN = 0
         self.poidsS = 0
@@ -31,43 +30,22 @@ class robotthread(threading.Thread):
     def run(self):
         logging.info("Robot Thread  : Started.")
         while not self.stopsignal:
-            self.robot.goToHighestReward(self.envthread)
-            # self.robot.randomMove()
-            xRobot,yRobot = self.robot.position
-
-            if self.envthread.getenv().grid[xRobot][yRobot].hasDust: # If room contains Dust (or Dust and Jewel)
-                self.robot.vacuum()
-            if self.envthread.getenv().grid[xRobot][yRobot].hasJewelry:
-                self.robot.takejewels()
-
+            if self.mode == "0":
+                self.noninforme()
+            else:
+                self.informe()
+            self.iteration += 1
             time.sleep(3)
-        logging.info("Robot Thread  : Stopped.")
-
-    def stop(self):
-        logging.info("Robot Thread  : Stop signal sent to Robot Thread")
-        self.stopsignal = True
-
-    """
-            while not self.stopsignal:
-            if self.mode == 0:
-                
-                self.poidsN = 0
-                self.poidsS = 0
-                self.poidsE = 0
-                self.poidsW = 0
-                self.poidsMin = 0
-                self.predictionPos = []
-                self.possibleMove = []
-                self.futurMove = None
-                self.futurPriority = -1
-                self.iteration += 1
-                time.sleep(3)
         logging.info("Poussiere aspire: " + str(self.robot.poussiere))
         logging.info("Bijoux recupere : " + str(self.robot.bijoux))
         logging.info("Bijoux aspire : " + str(self.robot.erreur))
         logging.info("Mouvement effectue : " + str(self.robot.mouvement))
         logging.info("Robot Thread  : Stopped.")
-    """
+
+    def stop(self):
+        logging.info("Robot Thread  : Stop signal sent to Robot Thread")
+        self.stopsignal = True
+        self.envthread.stop()
 
     def noninforme(self):
         if self.iteration == self.robot.maxiteration:
@@ -75,7 +53,6 @@ class robotthread(threading.Thread):
             return
         if self.iteration < self.robot.inititeration:
             self.robot.randomMove()
-            print("Mouvement init")
         else:
             try:
                 if self.robot.position[0] - 1 >= 0:
@@ -107,7 +84,6 @@ class robotthread(threading.Thread):
                 self.poidsW = math.inf
             self.poidsMin = min(self.poidsN, self.poidsS, self.poidsE, self.poidsW)
             if [self.poidsN, self.poidsS, self.poidsE, self.poidsW].count(self.poidsMin) == 1:
-                print("Mouvement poids absolue")
                 if self.poidsN == self.poidsMin:
                     self.robot.move(card.Cardinals.NORTH)
                 if self.poidsS == self.poidsMin:
@@ -140,14 +116,34 @@ class robotthread(threading.Thread):
                         self.futurPriority = -1
                     self.predictionPos = []
                 if self.futurMove is not None:
-                    print("Mouvement last action")
                     self.robot.move(self.futurMove)
                     self.futurMove = None
                 else:
-                    print("Mouvement random")
                     self.robot.randomMoveInSet(list(filter(lambda a: a is not None, self.possibleMove)))
         if self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasJewelry and not \
                 self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasDust:
             self.robot.takejewels()
         elif self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasDust:
             self.robot.vacuum()
+        self.poidsN = 0
+        self.poidsS = 0
+        self.poidsE = 0
+        self.poidsW = 0
+        self.poidsMin = 0
+        self.predictionPos = []
+        self.possibleMove = []
+        self.futurMove = None
+        self.futurPriority = -1
+
+    def informe(self):
+        if self.iteration == self.robot.maxiteration:
+            self.stop()
+            return
+        self.robot.goToHighestReward(self.envthread)
+        # self.robot.randomMove()
+        xRobot, yRobot = self.robot.position
+
+        if self.envthread.getenv().grid[xRobot][yRobot].hasDust:  # If room contains Dust (or Dust and Jewel)
+            self.robot.vacuum()
+        if self.envthread.getenv().grid[xRobot][yRobot].hasJewelry:
+            self.robot.takejewels()

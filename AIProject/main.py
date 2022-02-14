@@ -1,6 +1,5 @@
 import logging
 import threading
-import time
 from tkinter import *
 import time
 
@@ -9,7 +8,11 @@ import AIProject.threads.robotthread as robotthread
 
 if __name__ == "__main__":
     """Initialization"""
+    mode = ""
+    while not(mode == "0" or mode == "1"):
+        mode = input("Version du robot ? \n 0 : Non informé \n 1 : Informé \n")
 
+    stopSignal = False
     # Logging format
     # To use logging :
     # logging.info(message)
@@ -27,7 +30,7 @@ if __name__ == "__main__":
     # Starting the environment thread (It actually runs the run() method of the thread
 
     robot = environment.getenv().putrobot()
-    robotT = robotthread.robotthread(threading.Lock(), robot, environment)
+    robotT = robotthread.robotthread(threading.Lock(), robot, mode, environment)
     environment.start()
     robotT.start()
 
@@ -69,9 +72,11 @@ if __name__ == "__main__":
     """Interface"""
     # --> Tkinter
 
-    while True:
+    while not stopSignal:
         for widget in frame_grille.winfo_children():
             widget.destroy()
+        if not environment.is_alive():
+            stopSignal = True
         tkinterwindowsupdate()
         fenetre.update_idletasks()
         fenetre.update()
@@ -79,8 +84,6 @@ if __name__ == "__main__":
 
     """Program end"""
     # End of the program
-    # We stop the different thread
-    logging.info("Main      : Stopping environment thread.")
-    environment.stop()
+    fenetre.destroy()
     time.sleep(0.1)  # Little time sleep to have a clear console display (Might get removed)
     logging.info("Main      : Main program stopped.")

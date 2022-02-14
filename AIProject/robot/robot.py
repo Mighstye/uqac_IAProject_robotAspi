@@ -52,11 +52,6 @@ class Robot:
             self.lastmove.append(self.position)
         self.poids[self.position[0]][self.position[1]] += 1
         self.mouvement += 1
-        for ligne in self.poids:
-            for elem in ligne:
-                print(elem, end="")
-            print()
-        print("-------------")
 
     def vacuum(self):
         #  The robot vacuum everything in the room and put it in its dust bag (jewels included)
@@ -94,6 +89,7 @@ class Robot:
     def randomMoveInSet(self, cards):
         a = random.randint(0, len(cards)-1)
         self.move(cards[a])
+
     def goToPosition(self, tuple):
         if tuple[0] != self.position[0]:
             if self.position[0] > tuple[0]:
@@ -110,5 +106,4 @@ class Robot:
             return False
 
     def goToHighestReward(self, env):
-        print(env.highestReward())
         self.goToPosition(env.highestReward())

@@ -81,7 +81,6 @@ class environmentthread(threading.Thread):
                 elif env.env.grid[i][j].hasDust:
                     costgrid[i][j] = 10
                 costgrid[i][j] -= self.distanceToRobot(i, j)
-        print(costgrid)
         return costgrid
 
     def highestReward(self):
@@ -90,9 +89,7 @@ class environmentthread(threading.Thread):
         costgrid = self.computeCost()
         for i in range(5):
             for j in range(5):
-                # print("highestReward : " + str(highestReward))
                 if costgrid[i][j] > highestReward:
                     highestRewardPosition = [i, j]
                     highestReward = costgrid[i][j]
-        print("highestReward : " + str(highestReward))
         return highestRewardPosition
