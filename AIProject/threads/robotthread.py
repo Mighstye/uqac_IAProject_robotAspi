@@ -21,10 +21,10 @@ class robotthread(threading.Thread):
             # self.robot.randomMove()
             xRobot,yRobot = self.robot.position
 
-            #if envthread.environmentthread.getenv(self).getGrid()[xRobot][yRobot].hasDust: # If room contains Dust (or Dust and Jewel)
-            #    self.robot.vacuum()
-            #if envthread.environmentthread.getenv(self).getGrid()[xRobot][yRobot].hasJewelry:
-            #    self.robot.takejewels()
+            if self.envthread.getenv().grid[xRobot][yRobot].hasDust: # If room contains Dust (or Dust and Jewel)
+                self.robot.vacuum()
+            if self.envthread.getenv().grid[xRobot][yRobot].hasJewelry:
+                self.robot.takejewels()
 
             time.sleep(3)
         logging.info("Robot Thread  : Stopped.")

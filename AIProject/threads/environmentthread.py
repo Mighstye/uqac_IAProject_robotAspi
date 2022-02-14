@@ -71,7 +71,7 @@ class environmentthread(threading.Thread):
 
 
     def computeCost(self):
-        costgrid = np.zeros((5,5))
+        costgrid = np.zeros((5, 5))
         for i in range(5):
             for j in range(5):
                 if env.env.grid[i][j].hasJewelry and env.env.grid[i][j].hasDust:
@@ -85,15 +85,14 @@ class environmentthread(threading.Thread):
         return costgrid
 
     def highestReward(self):
-        highestRewardPosition = 0,0
+        highestRewardPosition = [0,0]
         highestReward = 0
-        costgrid = [0][0]
         costgrid = self.computeCost()
         for i in range(5):
             for j in range(5):
                 # print("highestReward : " + str(highestReward))
                 if costgrid[i][j] > highestReward:
-                    highestRewardPosition = j,i
+                    highestRewardPosition = [i, j]
                     highestReward = costgrid[i][j]
         print("highestReward : " + str(highestReward))
         return highestRewardPosition

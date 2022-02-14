@@ -38,20 +38,20 @@ class Robot:
 
     def vacuum(self):
         #  The robot vacuum everything in the room and put it in its dust bag (jewels included)
-        loot = self.environment.grid[self.position[0], self.position[1]].clean()
+        loot = self.environment.grid[self.position[0]][self.position[1]].clean()
         if loot[1]:
             self.malus += 1
-        logging.info("Robot     : Everything has been vacuumed on " + self.position)
+        logging.info("Robot     : Everything has been vacuumed on " + str(self.position))
 
     def takejewels(self):  # The robot take the jewels in the room
         #  The robot CANNOT take jewels if there is dust in the room and will vacuum otherwise
         #  The robot will put the jewels in its inventory
-        logging.info("Robot     : Attempt to take jewels on " + self.position)
-        roominfo = self.environment.grid[self.position[0], self.position[1]].ask()
+        logging.info("Robot     : Attempt to take jewels on " + str(self.position))
+        roominfo = self.environment.grid[self.position[0]][self.position[1]].ask()
         if not roominfo[0]:
-            logging.info("Robot     : Jewels has been taken on " + self.position)
+            logging.info("Robot     : Jewels has been taken on " + str(self.position))
             self.bonus += 1
-            self.environment.grid[self.position[1], self.position[1]].clean()
+            self.environment.grid[self.position[0]][self.position[1]].clean()
         else:
             logging.warning("Robot     : Can't take jewels when there is dust, too late !")
 
@@ -71,14 +71,14 @@ class Robot:
     def goToPosition(self, tuple):
         if tuple[0] != self.position[0]:
             if self.position[0] > tuple[0]:
-                self.move(Cardinals.WEST)
-            else:
-                self.move(Cardinals.EAST)
-        elif tuple[1] != self.position[1]:
-            if self.position[1] > tuple[1]:
                 self.move(Cardinals.NORTH)
             else:
                 self.move(Cardinals.SOUTH)
+        elif tuple[1] != self.position[1]:
+            if self.position[1] > tuple[1]:
+                self.move(Cardinals.WEST)
+            else:
+                self.move(Cardinals.EAST)
         else:
             logging.info("Already at position [" + str(tuple[0]) + "," + str(tuple[1]) + "]")
             return False
