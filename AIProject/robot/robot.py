@@ -6,13 +6,16 @@ import AIProject.environment.env as env
 
 
 class Robot:
-    malus = 0
-    bonus = 0
+    poussiere = 0
+    bijoux = 0
+    erreur = 0
+    mouvement = 0
     position = []  # Position of the robot on the grid
     lastmove = []
     poids = []
 
     def __init__(self, environment, coord):
+        self.maxiteration = 50
         self.inititeration = 4
         self.lastmove = []
         self.malus = 0
@@ -21,6 +24,10 @@ class Robot:
         self.environment = environment  # We tell the robot which env it's attached to
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()
         self.poids = [[0 for j in range(5)] for i in range(5)]
+        self.poussiere = 0
+        self.bijoux = 0
+        self.erreur = 0
+        self.mouvement = 0
         # We tell the robot where the robot spawned that the robot is actually here
 
     def move(self, card):  # Make the robot move
@@ -44,6 +51,7 @@ class Robot:
         else:
             self.lastmove.append(self.position)
         self.poids[self.position[0]][self.position[1]] += 1
+        self.mouvement += 1
         for ligne in self.poids:
             for elem in ligne:
                 print(elem, end="")
@@ -54,7 +62,8 @@ class Robot:
         #  The robot vacuum everything in the room and put it in its dust bag (jewels included)
         loot = self.environment.grid[self.position[0]][self.position[1]].clean()
         if loot[1]:
-            self.malus += 1
+            self.erreur += 1
+        self.poussiere += 1
         logging.info("Robot     : Everything has been vacuumed on " + str(self.position))
 
     def takejewels(self):  # The robot take the jewels in the room
@@ -64,7 +73,7 @@ class Robot:
         roominfo = self.environment.grid[self.position[0]][self.position[1]].ask()
         if not roominfo[0]:
             logging.info("Robot     : Jewels has been taken on " + str(self.position))
-            self.bonus += 1
+            self.bijoux += 1
             self.environment.grid[self.position[0]][self.position[1]].clean()
         else:
             logging.warning("Robot     : Can't take jewels when there is dust, too late !")

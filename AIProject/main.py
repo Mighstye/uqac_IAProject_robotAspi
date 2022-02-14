@@ -65,6 +65,8 @@ if __name__ == "__main__":
     # --> Tkinter
 
     while True:
+        for widget in frame_grille.winfo_children():
+            widget.destroy()
         tkinterwindowsupdate()
         fenetre.update_idletasks()
         fenetre.update()

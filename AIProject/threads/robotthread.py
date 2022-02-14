@@ -28,9 +28,11 @@ class robotthread(threading.Thread):
     def run(self):
         logging.info("Robot Thread  : Started.")
         while not self.stopsignal:
+            if self.iteration == self.robot.maxiteration:
+                self.stop()
+                break
             if self.iteration < self.robot.inititeration:
                 self.robot.randomMove()
-                self.iteration += 1
                 print("Mouvement init")
             else:
                 try:
@@ -88,7 +90,8 @@ class robotthread(threading.Thread):
                             elif self.possibleMove == card.Cardinals.WEST:
                                 self.predictionPos = self.robot.position + [-1, 0]
                         try:
-                            if self.robot.lastmove.index(self.predictionPos) < self.futurPriority or self.futurPriority == -1:
+                            if self.robot.lastmove.index(
+                                    self.predictionPos) < self.futurPriority or self.futurPriority == -1:
                                 self.futurPriority = self.robot.lastmove.index(self.predictionPos)
                                 self.futurMove = self.possibleMove[loop]
                         except ValueError:
@@ -101,7 +104,8 @@ class robotthread(threading.Thread):
                     else:
                         print("Mouvement random")
                         self.robot.randomMoveInSet(list(filter(lambda a: a is not None, self.possibleMove)))
-            if self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasJewelry and not self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasDust:
+            if self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasJewelry and not \
+                    self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasDust:
                 self.robot.takejewels()
             elif self.robot.environment.grid[self.robot.position[0]][self.robot.position[1]].hasDust:
                 self.robot.vacuum()
@@ -114,7 +118,13 @@ class robotthread(threading.Thread):
             self.possibleMove = []
             self.futurMove = None
             self.futurPriority = -1
+            self.iteration += 1
             time.sleep(3)
+        logging.info("Métrique : \n"
+                     "Poussiere aspire: " + str(self.robot.poussiere)) + \
+        "\nBijoux recupere : " + str(self.robot.bijoux) + \
+        "\nBijoux aspire : " + str(self.robot.erreur) + \
+        "\nMouvement effectue : " + str(self.robot.mouvement)
         logging.info("Robot Thread  : Stopped.")
 
     def stop(self):
