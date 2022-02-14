@@ -33,17 +33,17 @@ class Robot:
     def move(self, card):  # Make the robot move
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot leave the room
         if card == Cardinals.NORTH:
-            self.position = [self.position[0] - 1, self.position[1]]
             logging.info("Going north")
+            self.position = [self.position[0] - 1, self.position[1]]
         if card == Cardinals.SOUTH:
-            self.position = [self.position[0] + 1, self.position[1]]
             logging.info("Going south")
+            self.position = [self.position[0] + 1, self.position[1]]
         if card == Cardinals.EAST:
-            self.position = [self.position[0], self.position[1] + 1]
             logging.info("Going east")
+            self.position = [self.position[0], self.position[1] + 1]
         if card == Cardinals.WEST:
-            self.position = [self.position[0], self.position[1] - 1]
             logging.info("Going west")
+            self.position = [self.position[0], self.position[1] - 1]
         self.environment.grid[self.position[0]][self.position[1]].changerobotstate()  # Robot join the room
         if len(self.lastmove) == self.inititeration:
             self.lastmove.append(self.position)
@@ -94,4 +94,21 @@ class Robot:
     def randomMoveInSet(self, cards):
         a = random.randint(0, len(cards)-1)
         self.move(cards[a])
+    def goToPosition(self, tuple):
+        if tuple[0] != self.position[0]:
+            if self.position[0] > tuple[0]:
+                self.move(Cardinals.NORTH)
+            else:
+                self.move(Cardinals.SOUTH)
+        elif tuple[1] != self.position[1]:
+            if self.position[1] > tuple[1]:
+                self.move(Cardinals.WEST)
+            else:
+                self.move(Cardinals.EAST)
+        else:
+            logging.info("Already at position [" + str(tuple[0]) + "," + str(tuple[1]) + "]")
+            return False
 
+    def goToHighestReward(self, env):
+        print(env.highestReward())
+        self.goToPosition(env.highestReward())

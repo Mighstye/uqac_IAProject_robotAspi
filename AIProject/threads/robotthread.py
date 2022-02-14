@@ -2,13 +2,14 @@ import math
 import time
 import logging
 import threading
+import AIProject.threads.environmentthread as envthread
 import AIProject.enum.cardinals as card
-
 
 class robotthread(threading.Thread):
     stopsignal = False
 
     def __init__(self, mutex, robot, mode):
+    def __init__(self, mutex, robot, envthread):
         time.sleep(0.5)
         self.poidsN = 0
         self.poidsS = 0
@@ -22,12 +23,25 @@ class robotthread(threading.Thread):
         self.iteration = 0
         self.mutex = mutex
         self.robot = robot
+        self.envthread = envthread
         self.mode = mode  # 0 : Non informe, 1 : Informe
         threading.Thread.__init__(self)
         logging.info("Robot Thread  : Initialized.")
 
     def run(self):
         logging.info("Robot Thread  : Started.")
+        while not self.stopsignal:
+            self.robot.goToHighestReward(self.envthread)
+            # self.robot.randomMove()
+            xRobot,yRobot = self.robot.position
+
+            if self.envthread.getenv().grid[xRobot][yRobot].hasDust: # If room contains Dust (or Dust and Jewel)
+                self.robot.vacuum()
+            if self.envthread.getenv().grid[xRobot][yRobot].hasJewelry:
+                self.robot.takejewels()
+
+            time.sleep(3)
+        logging.info("Robot Thread  : Stopped.")
 
     def stop(self):
         logging.info("Robot Thread  : Stop signal sent to Robot Thread")

@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # Starting the environment thread (It actually runs the run() method of the thread
 
     robot = environment.getenv().putrobot()
-    robotT = robotthread.robotthread(threading.Lock(), robot)
+    robotT = robotthread.robotthread(threading.Lock(), robot, environment)
     environment.start()
     robotT.start()
 
