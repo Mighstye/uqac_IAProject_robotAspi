@@ -11,6 +11,9 @@ if __name__ == "__main__":
     mode = ""
     while not(mode == "0" or mode == "1"):
         mode = input("Version du robot ? \n 0 : Non informé \n 1 : Informé \n")
+    iteration = ""
+    while not(iteration.isdigit()):
+        iteration = input("Combien d'itération ? \n")
 
     stopSignal = False
     # Logging format
@@ -30,7 +33,7 @@ if __name__ == "__main__":
     # Starting the environment thread (It actually runs the run() method of the thread
 
     robot = environment.getenv().putrobot()
-    robotT = robotthread.robotthread(threading.Lock(), robot, mode, environment)
+    robotT = robotthread.robotthread(threading.Lock(), robot, mode, environment, int(iteration))
     environment.start()
     robotT.start()
 

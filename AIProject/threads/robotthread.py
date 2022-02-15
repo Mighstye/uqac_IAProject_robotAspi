@@ -8,7 +8,7 @@ import AIProject.enum.cardinals as card
 class robotthread(threading.Thread):
     stopsignal = False
 
-    def __init__(self, mutex, robot, mode, envthread):
+    def __init__(self, mutex, robot, mode, envthread, maxiteration):
         time.sleep(0.5)
         self.poidsN = 0
         self.poidsS = 0
@@ -24,6 +24,7 @@ class robotthread(threading.Thread):
         self.robot = robot
         self.envthread = envthread
         self.mode = mode  # 0 : Non informe, 1 : Informe
+        self.robot.maxiteration = maxiteration
         threading.Thread.__init__(self)
         logging.info("Robot Thread  : Initialized.")
 

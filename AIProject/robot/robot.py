@@ -2,7 +2,6 @@ import logging
 
 from AIProject.enum.cardinals import Cardinals
 import random
-import AIProject.environment.env as env
 
 
 class Robot:
@@ -15,7 +14,7 @@ class Robot:
     poids = []
 
     def __init__(self, environment, coord):
-        self.maxiteration = 50
+        self.maxiteration = 50  # DEFAULT VALUE
         self.inititeration = 4
         self.lastmove = []
         self.malus = 0
