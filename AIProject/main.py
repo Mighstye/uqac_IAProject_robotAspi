@@ -52,6 +52,15 @@ if __name__ == "__main__":
 
     def tkinterwindowsupdate():
         newlist = []
+        label1 = Label(master=fenetre, text="Poussières aspirées : "+str(robot.poussiere), width=20, height=3, font=(30))
+        label2 = Label(master=fenetre, text="Bijoux récupérés    : "+str(robot.bijoux), width=20, height=3, font=(30))
+        label3 = Label(master=fenetre, text="Bijoux perdu        : " +str(robot.erreur), width=20, height=3, font=(30))
+        label1.configure(fg='green')
+        label2.configure(fg='blue')
+        label3.configure(fg='red')
+        label1.grid(row=0, column=0)
+        label2.grid(row=1, column=0)
+        label3.grid(row=2, column=0)
         for ligne in range(5):
             text = ""
             list_ligne_label = []
@@ -62,7 +71,7 @@ if __name__ == "__main__":
                     text += "💎"
                 if environment.getenv().grid[ligne][colonne].robothere:
                     text += "🤖"
-                label = Label(master=frame_grille, text=text, borderwidth=1, relief="raised", width=10, height=5)
+                label = Label(master=frame_grille, text=text, borderwidth=1, relief="solid", width=10, height=5)
                 label.grid(row=ligne, column=colonne)
                 list_ligne_label.append(label)
                 text = ""
